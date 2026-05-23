@@ -44,9 +44,9 @@ def add_patient(request):
             address=request.POST['address'],
             blood_group=request.POST['blood_group'],
         )
-        messages.success(request, 'Marz successfully register ho gaya!')
+        messages.success(request, 'patient successfully register!')
         return redirect('patient_list')
-    return render(request, 'patients/form.html', {'title': 'Naya Marz Add Karein'})
+    return render(request, 'patients/form.html', {'title': 'Add new patient'})
 
 
 @login_required
@@ -62,12 +62,12 @@ def edit_patient(request, pk):
         patient.save()
         messages.success(request, 'Marz ki maloomat update ho gayi!')
         return redirect('patient_list')
-    return render(request, 'patients/form.html', {'patient': patient, 'title': 'Marz Edit Karein'})
+    return render(request, 'patients/form.html', {'patient': patient, 'title': 'Add new patient'})
 
 
 @login_required
 def delete_patient(request, pk):
     patient = get_object_or_404(Patient, pk=pk)
     patient.delete()
-    messages.warning(request, 'Marz delete ho gaya.')
+    messages.warning(request, 'The disease has been deleted.')
     return redirect('patient_list')
