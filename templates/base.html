@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="ur" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Hospital Management System{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        body { background: #f0f2f5; font-family: 'Segoe UI', sans-serif; }
+        .sidebar {
+            width: 240px; min-height: 100vh;
+            background: linear-gradient(180deg, #0d3b6e 0%, #1a5276 100%);
+            color: white; position: fixed; top: 0; left: 0; z-index: 100;
+            box-shadow: 3px 0 10px rgba(0,0,0,0.2);
+        }
+        .sidebar .brand { padding: 20px 16px; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        .sidebar .brand h5 { color: #fff; font-size: 1.1rem; margin: 0; }
+        .sidebar .brand small { color: #aed6f1; font-size: 0.75rem; }
+        .sidebar nav a {
+            display: flex; align-items: center; gap: 10px;
+            padding: 10px 16px; color: #aed6f1;
+            text-decoration: none; font-size: 0.9rem;
+            border-radius: 6px; margin: 2px 8px;
+            transition: all 0.2s;
+        }
+        .sidebar nav a:hover, .sidebar nav a.active {
+            background: rgba(255,255,255,0.15); color: #fff;
+        }
+        .sidebar nav a i { font-size: 1.1rem; width: 20px; }
+        .sidebar .nav-section { padding: 8px 16px 4px; color: #7fb3d3; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 1px; }
+        .main-content { margin-left: 240px; padding: 24px; min-height: 100vh; }
+        .topbar { background: white; padding: 12px 20px; border-radius: 10px; margin-bottom: 20px; box-shadow: 0 1px 4px rgba(0,0,0,0.08); display: flex; justify-content: space-between; align-items: center; }
+        .topbar h4 { margin: 0; font-size: 1.1rem; color: #1a3a5c; }
+        .card { border: none; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.07); }
+        .card-header { border-radius: 12px 12px 0 0 !important; font-weight: 600; }
+        .stat-card { border-radius: 12px; padding: 20px; color: white; }
+        .stat-card h2 { font-size: 2rem; font-weight: 700; margin: 0; }
+        .stat-card p { margin: 4px 0 0; opacity: 0.9; font-size: 0.9rem; }
+        .stat-card i { font-size: 2.5rem; opacity: 0.25; }
+        .btn-primary { background: #1a5276; border-color: #1a5276; }
+        .btn-primary:hover { background: #0d3b6e; border-color: #0d3b6e; }
+        .table th { font-weight: 600; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.5px; }
+        .badge { font-size: 0.78rem; }
+    </style>
+</head>
+<body>
+
+<!-- Sidebar -->
+<div class="sidebar">
+    <div class="brand">
+        <h5><i class="bi bi-hospital-fill me-2"></i>HMS</h5>
+        <small>Hospital Management</small>
+    </div>
+    <nav class="mt-2">
+        <span class="nav-section">Main</span>
+        <a href="/" class="{% if request.path == '/' %}active{% endif %}">
+            <i class="bi bi-speedometer2"></i> Dashboard
+        </a>
+        <span class="nav-section">Management</span>
+        <a href="/patients/" class="{% if '/patients/' in request.path %}active{% endif %}">
+            <i class="bi bi-people-fill"></i> Marz (Patients)
+        </a>
+        <a href="/doctors/" class="{% if '/doctors/' in request.path %}active{% endif %}">
+            <i class="bi bi-person-badge-fill"></i> Doctors
+        </a>
+        <a href="/appointments/" class="{% if '/appointments/' in request.path %}active{% endif %}">
+            <i class="bi bi-calendar-check-fill"></i> Appointments
+        </a>
+        <span class="nav-section">Services</span>
+        <a href="/pharmacy/" class="{% if '/pharmacy/' in request.path %}active{% endif %}">
+            <i class="bi bi-capsule-pill"></i> Pharmacy
+        </a>
+        <a href="/billing/" class="{% if '/billing/' in request.path %}active{% endif %}">
+            <i class="bi bi-receipt-cutoff"></i> Billing
+        </a>
+        <a href="/wards/" class="{% if '/wards/' in request.path %}active{% endif %}">
+            <i class="bi bi-building-fill"></i> Wards / Beds
+        </a>
+        <span class="nav-section">Account</span>
+        <a href="/admin/" target="_blank">
+            <i class="bi bi-shield-lock-fill"></i> Admin Panel
+        </a>
+        <a href="/logout/" style="color: #f1948a;">
+            <i class="bi bi-box-arrow-right"></i> Logout
+        </a>
+    </nav>
+</div>
+
+<!-- Main Content -->
+<div class="main-content">
+    <div class="topbar">
+        <h4>{% block page_title %}Dashboard{% endblock %}</h4>
+        <span style="color:#666; font-size:0.85rem;">
+            <i class="bi bi-person-circle me-1"></i>{{ request.user.username }}
+        </span>
+    </div>
+
+    {% if messages %}
+    {% for msg in messages %}
+    <div class="alert alert-{% if msg.tags == 'error' %}danger{% else %}{{ msg.tags }}{% endif %} alert-dismissible fade show" role="alert">
+        {{ msg }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+    {% endfor %}
+    {% endif %}
+
+    {% block content %}{% endblock %}
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% block page_title %}Wards{% endblock %}
+{% block content %}
+
+<div class="d-flex gap-2 mb-3">
+    <a href="{% url 'add_ward' %}" class="btn btn-primary"><i class="bi bi-plus-lg me-1"></i>New Ward</a>
+    <a href="{% url 'bed_list' %}" class="btn btn-outline-primary"><i class="bi bi-grid me-1"></i>View All Beds</a>
+    <a href="{% url 'add_bed' %}" class="btn btn-outline-success"><i class="bi bi-plus-lg me-1"></i>New Bed</a>
+</div>
+
+<div class="row g-3">
+    {% for ward in wards %}
+    <div class="col-md-4">
+        <div class="card h-100">
+            <div class="card-header bg-teal text-white" style="background:#148f77;">
+                <strong><i class="bi bi-building me-1"></i>{{ ward.name }}</strong>
+            </div>
+            <div class="card-body">
+                <p class="mb-1">Capacity: <strong>{{ ward.capacity }}</strong> beds</p>
+                <p class="mb-1">Occupied: <span class="badge bg-danger">{{ ward.occupied_count }}</span></p>
+                <p class="mb-0">Available: <span class="badge bg-success">{{ ward.free_count }}</span></p>
+
+                <!-- Progress bar -->
+                <div class="progress mt-2" style="height:8px;">
+                    {% if ward.capacity > 0 %}
+                    <div class="progress-bar bg-danger" style="width: {% widthratio ward.occupied_count ward.capacity 100 %}%"></div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <div class="col-12">
+        <div class="card p-4 text-center text-muted">No wards have been created yet.</div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

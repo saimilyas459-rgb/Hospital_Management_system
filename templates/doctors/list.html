@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% block page_title %}Doctors List{% endblock %}
+{% block content %}
+
+<div class="card">
+    <div class="card-header bg-success text-white d-flex justify-content-between align-items-center">
+        <span><i class="bi bi-person-badge-fill me-2"></i>All Doctors</span>
+        <a href="{% url 'add_doctor' %}" class="btn btn-light btn-sm"><i class="bi bi-plus-lg me-1"></i>New Doctor</a>
+    </div>
+    <div class="card-body">
+        <form method="get" class="mb-3">
+            <div class="input-group" style="max-width:350px;">
+                <input type="text" name="q" class="form-control" placeholder="Search by name..." value="{{ query }}">
+                <button class="btn btn-success" type="submit"><i class="bi bi-search"></i></button>
+            </div>
+        </form>
+        <table class="table table-hover align-middle">
+            <thead class="table-dark">
+                <tr><th>#</th><th>Name</th><th>Speciality</th><th>Phone</th><th>Fee</th><th>Status</th><th>Actions</th></tr>
+            </thead>
+            <tbody>
+                {% for d in doctors %}
+                <tr>
+                    <td>{{ d.id }}</td>
+                    <td><strong>Dr. {{ d.name }}</strong></td>
+                    <td><span class="badge bg-info text-dark">{{ d.speciality }}</span></td>
+                    <td>{{ d.phone }}</td>
+                    <td>Rs. {{ d.fee }}</td>
+                    <td>
+                        {% if d.available %}
+                        <span class="badge bg-success">Available</span>
+                        {% else %}
+                        <span class="badge bg-secondary">Unavailable</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <a href="{% url 'edit_doctor' d.id %}" class="btn btn-sm btn-warning"><i class="bi bi-pencil"></i></a>
+                        <a href="{% url 'delete_doctor' d.id %}" class="btn btn-sm btn-danger"
+                           onclick="return confirm('Are you sure you want to delete Dr. {{ d.name }}?')"><i class="bi bi-trash"></i></a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr><td colspan="7" class="text-center text-muted p-4">No doctors found.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

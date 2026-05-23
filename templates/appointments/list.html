@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% block page_title %}Appointments{% endblock %}
+{% block content %}
+
+<div class="card">
+    <div class="card-header d-flex justify-content-between align-items-center" style="background:#7d3c98; color:white;">
+        <span><i class="bi bi-calendar-check-fill me-2"></i>Tamam Appointments</span>
+        <a href="{% url 'add_appointment' %}" class="btn btn-light btn-sm"><i class="bi bi-plus-lg me-1"></i>Naya Appointment</a>
+    </div>
+    <div class="card-body">
+        <!-- Filter by Status -->
+        <div class="d-flex gap-2 mb-3">
+            <a href="?" class="btn btn-sm {% if not status_filter %}btn-secondary{% else %}btn-outline-secondary{% endif %}">Sab</a>
+            <a href="?status=Pending" class="btn btn-sm {% if status_filter == 'Pending' %}btn-warning{% else %}btn-outline-warning{% endif %}">Pending</a>
+            <a href="?status=Confirmed" class="btn btn-sm {% if status_filter == 'Confirmed' %}btn-primary{% else %}btn-outline-primary{% endif %}">Confirmed</a>
+            <a href="?status=Done" class="btn btn-sm {% if status_filter == 'Done' %}btn-success{% else %}btn-outline-success{% endif %}">Done</a>
+            <a href="?status=Cancelled" class="btn btn-sm {% if status_filter == 'Cancelled' %}btn-danger{% else %}btn-outline-danger{% endif %}">Cancelled</a>
+        </div>
+
+        <table class="table table-hover align-middle">
+            <thead class="table-dark">
+                <tr><th>#</th><th>Marz</th><th>Doctor</th><th>Date</th><th>Waqt</th><th>Wajah</th><th>Status</th><th>Actions</th></tr>
+            </thead>
+            <tbody>
+                {% for a in appointments %}
+                <tr>
+                    <td>{{ a.id }}</td>
+                    <td><strong>{{ a.patient.name }}</strong></td>
+                    <td>Dr. {{ a.doctor.name }}<br><small class="text-muted">{{ a.doctor.speciality }}</small></td>
+                    <td>{{ a.date }}</td>
+                    <td>{{ a.time }}</td>
+                    <td><small>{{ a.reason|truncatechars:30 }}</small></td>
+                    <td>
+                        {% if a.status == 'Pending' %}<span class="badge bg-warning text-dark">Pending</span>
+                        {% elif a.status == 'Confirmed' %}<span class="badge bg-primary">Confirmed</span>
+                        {% elif a.status == 'Done' %}<span class="badge bg-success">Done</span>
+                        {% else %}<span class="badge bg-danger">Cancelled</span>{% endif %}
+                    </td>
+                    <td>
+                        <a href="{% url 'edit_appointment' a.id %}" class="btn btn-sm btn-warning"><i class="bi bi-pencil"></i></a>
+                        <a href="{% url 'delete_appointment' a.id %}" class="btn btn-sm btn-danger"
+                           onclick="return confirm('Appointment delete karein?')"><i class="bi bi-trash"></i></a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr><td colspan="8" class="text-center text-muted p-4">Koi appointment nahi</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

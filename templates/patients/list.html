@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% block page_title %}Patients List{% endblock %}
+{% block content %}
+
+<div class="card">
+    <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+        <span><i class="bi bi-people-fill me-2"></i>All Patients</span>
+        <a href="{% url 'add_patient' %}" class="btn btn-light btn-sm"><i class="bi bi-person-plus me-1"></i>New Patient</a>
+    </div>
+    <div class="card-body">
+        <!-- Search -->
+        <form method="get" class="mb-3">
+            <div class="input-group" style="max-width:350px;">
+                <input type="text" name="q" class="form-control" placeholder="Search by name..." value="{{ query }}">
+                <button class="btn btn-primary" type="submit"><i class="bi bi-search"></i></button>
+            </div>
+        </form>
+
+        <table class="table table-hover align-middle">
+            <thead class="table-dark">
+                <tr>
+                    <th>#</th>
+                    <th>Name</th>
+                    <th>Age</th>
+                    <th>Gender</th>
+                    <th>Phone</th>
+                    <th>Blood Group</th>
+                    <th>Register Date</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for p in patients %}
+                <tr>
+                    <td>{{ p.id }}</td>
+                    <td><strong>{{ p.name }}</strong></td>
+                    <td>{{ p.age }} years</td>
+                    <td>{{ p.gender }}</td>
+                    <td>{{ p.phone }}</td>
+                    <td><span class="badge bg-danger">{{ p.blood_group }}</span></td>
+                    <td>{{ p.registered|date:"d M Y" }}</td>
+                    <td>
+                        <a href="{% url 'edit_patient' p.id %}" class="btn btn-sm btn-warning">
+                            <i class="bi bi-pencil"></i>
+                        </a>
+                        <a href="{% url 'delete_patient' p.id %}" class="btn btn-sm btn-danger"
+                           onclick="return confirm('Are you sure you want to delete {{ p.name }}?')">
+                            <i class="bi bi-trash"></i>
+                        </a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr><td colspan="8" class="text-center text-muted p-4">No patients found.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <small class="text-muted">Total: {{ patients|length }} patients</small>
+    </div>
+</div>
+{% endblock %}

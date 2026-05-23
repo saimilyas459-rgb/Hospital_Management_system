@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% block page_title %}{{ title }}{% endblock %}
+{% block content %}
+
+<div class="card" style="max-width:550px;">
+    <div class="card-header bg-danger text-white">
+        <i class="bi bi-capsule me-2"></i>{{ title }}
+    </div>
+    <div class="card-body">
+        <form method="post">
+            {% csrf_token %}
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Medicine Name *</label>
+                    <input type="text" name="name" class="form-control"
+                           value="{{ medicine.name|default:'' }}" required>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Company *</label>
+                    <input type="text" name="company" class="form-control"
+                           value="{{ medicine.company|default:'' }}" required>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Price (Rs.) *</label>
+                    <input type="number" name="price" class="form-control"
+                           value="{{ medicine.price|default:'' }}" required min="0" step="0.01">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Stock (quantity) *</label>
+                    <input type="number" name="stock" class="form-control"
+                           value="{{ medicine.stock|default:'' }}" required min="0">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Expiry Date *</label>
+                    <input type="date" name="expiry" class="form-control"
+                           value="{{ medicine.expiry|default:'' }}" required>
+                </div>
+            </div>
+            <div class="mt-4 d-flex gap-2">
+                <button type="submit" class="btn btn-danger"><i class="bi bi-check-lg me-1"></i>Save</button>
+                <a href="{% url 'medicine_list' %}" class="btn btn-secondary"><i class="bi bi-arrow-left me-1"></i>Back</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

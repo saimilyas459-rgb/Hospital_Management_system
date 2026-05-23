@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% block page_title %}{{ title }}{% endblock %}
+{% block content %}
+
+<div class="card" style="max-width:550px;">
+    <div class="card-header text-white" style="background:#b7770d;">
+        <i class="bi bi-receipt me-2"></i>{{ title }}
+    </div>
+    <div class="card-body">
+        <form method="post">
+            {% csrf_token %}
+            <div class="row g-3">
+                <div class="col-12">
+                    <label class="form-label fw-semibold">Patient *</label>
+                    <select name="patient" class="form-select" required>
+                        <option value="">-- Select Patient --</option>
+                        {% for p in patients %}
+                        <option value="{{ p.id }}" {% if bill.patient_id == p.id %}selected{% endif %}>{{ p.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Amount (Rs.) *</label>
+                    <input type="number" name="amount" class="form-control"
+                           value="{{ bill.amount|default:'' }}" required min="0" step="0.01">
+                </div>
+                <div class="col-md-6 d-flex align-items-end">
+                    <div class="form-check">
+                        <input type="checkbox" name="paid" class="form-check-input"
+                               id="paid" {% if bill.paid %}checked{% endif %}>
+                        <label class="form-check-label fw-semibold" for="paid">Mark as Paid</label>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <label class="form-label fw-semibold">Description</label>
+                    <textarea name="description" class="form-control" rows="3"
+                              placeholder="Bill details or reason...">{{ bill.description|default:'' }}</textarea>
+                </div>
+            </div>
+            <div class="mt-4 d-flex gap-2">
+                <button type="submit" class="btn text-white" style="background:#b7770d;"><i class="bi bi-check-lg me-1"></i>Save</button>
+                <a href="{% url 'bill_list' %}" class="btn btn-secondary"><i class="bi bi-arrow-left me-1"></i>Back</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

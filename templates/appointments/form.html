@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% block page_title %}{{ title }}{% endblock %}
+{% block content %}
+
+<div class="card" style="max-width:600px;">
+    <div class="card-header text-white" style="background:#7d3c98;">
+        <i class="bi bi-calendar-plus me-2"></i>{{ title }}
+    </div>
+    <div class="card-body">
+        <form method="post">
+            {% csrf_token %}
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Marz *</label>
+                    <select name="patient" class="form-select" required>
+                        <option value="">-- Marz chunein --</option>
+                        {% for p in patients %}
+                        <option value="{{ p.id }}" {% if appt.patient_id == p.id %}selected{% endif %}>{{ p.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Doctor *</label>
+                    <select name="doctor" class="form-select" required>
+                        <option value="">-- Doctor chunein --</option>
+                        {% for d in doctors %}
+                        <option value="{{ d.id }}" {% if appt.doctor_id == d.id %}selected{% endif %}>Dr. {{ d.name }} ({{ d.speciality }})</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Date *</label>
+                    <input type="date" name="date" class="form-control"
+                           value="{{ appt.date|default:'' }}" required>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Waqt *</label>
+                    <input type="time" name="time" class="form-control"
+                           value="{{ appt.time|default:'' }}" required>
+                </div>
+                {% if statuses %}
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Status</label>
+                    <select name="status" class="form-select">
+                        {% for val, label in statuses %}
+                        <option value="{{ val }}" {% if appt.status == val %}selected{% endif %}>{{ label }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                {% endif %}
+                <div class="col-12">
+                    <label class="form-label fw-semibold">Wajah (Reason)</label>
+                    <textarea name="reason" class="form-control" rows="3"
+                              placeholder="Kyu aa rahe hain?">{{ appt.reason|default:'' }}</textarea>
+                </div>
+            </div>
+            <div class="mt-4 d-flex gap-2">
+                <button type="submit" class="btn text-white" style="background:#7d3c98;"><i class="bi bi-check-lg me-1"></i>Save Karein</button>
+                <a href="{% url 'appointment_list' %}" class="btn btn-secondary"><i class="bi bi-arrow-left me-1"></i>Wapas</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

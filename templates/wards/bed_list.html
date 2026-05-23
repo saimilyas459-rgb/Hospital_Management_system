@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% block page_title %}Bed List{% endblock %}
+{% block content %}
+
+<div class="d-flex gap-2 mb-3">
+    <a href="{% url 'ward_list' %}" class="btn btn-outline-secondary"><i class="bi bi-arrow-left me-1"></i>Wards</a>
+    <a href="{% url 'add_bed' %}" class="btn btn-success"><i class="bi bi-plus-lg me-1"></i>New Bed</a>
+</div>
+
+<div class="card">
+    <div class="card-header" style="background:#148f77; color:white;">
+        <i class="bi bi-grid-fill me-2"></i>All Beds
+    </div>
+    <div class="card-body p-0">
+        <table class="table table-hover align-middle mb-0">
+            <thead class="table-dark">
+                <tr><th>#</th><th>Bed No.</th><th>Ward</th><th>Patient</th><th>Status</th><th>Actions</th></tr>
+            </thead>
+            <tbody>
+                {% for b in beds %}
+                <tr>
+                    <td>{{ b.id }}</td>
+                    <td><strong>{{ b.bed_no }}</strong></td>
+                    <td>{{ b.ward.name }}</td>
+                    <td>{% if b.patient %}{{ b.patient.name }}{% else %}<span class="text-muted">Vacant</span>{% endif %}</td>
+                    <td>
+                        {% if b.occupied %}
+                        <span class="badge bg-danger">Occupied</span>
+                        {% else %}
+                        <span class="badge bg-success">Available</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <a href="{% url 'assign_bed' b.id %}" class="btn btn-sm btn-primary">
+                            <i class="bi bi-person-plus"></i> Assign
+                        </a>
+                        {% if b.occupied %}
+                        <a href="{% url 'free_bed' b.id %}" class="btn btn-sm btn-outline-success"
+                           onclick="return confirm('Are you sure you want to vacate this bed?')">
+                            <i class="bi bi-door-open"></i> Free
+                        </a>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% empty %}
+                <tr><td colspan="6" class="text-center text-muted p-4">No beds available.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
